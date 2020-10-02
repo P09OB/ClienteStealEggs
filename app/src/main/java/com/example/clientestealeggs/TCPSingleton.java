@@ -1,5 +1,7 @@
 package com.example.clientestealeggs;
 
+import android.util.Log;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -28,12 +30,14 @@ public class TCPSingleton extends Thread {
 
     private BufferedWriter writer;
     private Socket socket;
-    private MainActivity observador;
+    private OnMessageListener observador;
     private String mensaje;
+    private String codigo;
+    private int puerto;
 
 
-     //Suscripcion
-    public void setCliente(MainActivity observador){
+    //Suscripcion
+    public void setCliente(OnMessageListener observador){
         this.observador = observador;
     }
 
@@ -43,9 +47,10 @@ public class TCPSingleton extends Thread {
         try {
 
             //Conexion
-            System.out.println("Enviando solicitud de conexion...");
-            socket = new Socket("192.168.0.42",5000);
-            System.out.println("Conectamos");
+            Log.e("tcp","Enviando solicitud de conexion...");
+            Log.e("tcp","codigo:"+codigo);
+            socket = new Socket("192.168.0."+codigo,puerto);
+            Log.e("tcp","Conectamos");
 
 
             //Declaracion
@@ -96,7 +101,17 @@ public class TCPSingleton extends Thread {
         return mensaje;
     }
 
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
+    }
+    public void setPuerto(int puerto) {
+        this.puerto = puerto;
+    }
 
 
-
+    public int getPuerto() { return puerto; }
 }
