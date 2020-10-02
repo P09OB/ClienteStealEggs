@@ -72,21 +72,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ping();
 
 
-        if(verificaCodigo == true){
+        if(codigo1 != null) {
+
+            if (verificaCodigo == true) {
 
 
-        SharedPreferences preferences = getSharedPreferences("Cajon",MODE_PRIVATE);
-        preferences.edit().putString("codigo1",codigo1).apply();
+                SharedPreferences preferences = getSharedPreferences("Cajon", MODE_PRIVATE);
+                preferences.edit().putString("codigo1", codigo1).apply();
 
-            Intent i = new Intent(this,Avatar.class);
-            startActivity(i);
+                Intent i = new Intent(this, Avatar.class);
+                startActivity(i);
+            }
+
+            if (verificaCodigo == false) {
+                Toast.makeText(this, "El código digitado no correponde", Toast.LENGTH_LONG).show();
+            }
+
         }
-
-        if (verificaCodigo == false) {
-            Toast.makeText(this,"El código digitado no correponde",Toast.LENGTH_LONG).show();
-        }
-
-
 
     }
 
