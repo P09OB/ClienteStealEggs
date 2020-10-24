@@ -6,15 +6,35 @@ public class Coordenadas {
     private int y;
     private String id;
     private boolean dir;
+    private boolean steal;
+    private boolean jump;
 
-    public Coordenadas(int x, int y, boolean dir, String id) {
+    public Coordenadas(int x, int y, boolean dir, boolean steal, boolean jump, String id) {
         this.x = x;
         this.y = y;
         this.id = id;
         this.dir = dir;
+        this.steal = steal;
+        this. jump = jump;
     }
 
     public Coordenadas() {
+    }
+
+    public boolean isSteal() {
+        return steal;
+    }
+
+    public void setSteal(boolean steal) {
+        this.steal = steal;
+    }
+
+    public boolean isJump() {
+        return jump;
+    }
+
+    public void setJump(boolean jump) {
+        this.jump = jump;
     }
 
     public boolean isDir() {

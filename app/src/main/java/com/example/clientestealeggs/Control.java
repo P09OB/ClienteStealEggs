@@ -29,11 +29,12 @@ public class Control extends AppCompatActivity implements View.OnClickListener, 
     private Button rodar;
     private ConstraintLayout colorBackground;
     private TextView score1, score2, time;
-    int puerto;
-    boolean buttonPressed;
-    boolean jump;
+    private int puerto;
+    private boolean buttonPressed;
     private int x, y;
     private boolean dir = false;
+    private boolean jump = false;
+    private boolean steal = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,14 +58,14 @@ public class Control extends AppCompatActivity implements View.OnClickListener, 
         tcp = TCPSingleton.getInstance();
         tcp.setObservador(this);
 
-        SharedPreferences preferences= getSharedPreferences("Cajon",MODE_PRIVATE);
-        puerto = preferences.getInt("puerto",0);
+        SharedPreferences preferences = getSharedPreferences("Cajon", MODE_PRIVATE);
+        puerto = preferences.getInt("puerto", 0);
 
-        if(puerto ==5000){
+        if (puerto == 5000) {
 
             colorBackground.setBackgroundColor(Color.parseColor("#EB5E55"));
 
-        } else  if(puerto == 4000){
+        } else if (puerto == 4000) {
             colorBackground.setBackgroundColor(Color.parseColor("#9DD1FF"));
             x = 870;
         }
@@ -82,13 +83,12 @@ public class Control extends AppCompatActivity implements View.OnClickListener, 
 
         Gson gson = new Gson();
         GameState gameState = gson.fromJson(mensaje, GameState.class);
-        Log.e("timeControl",""+gameState.getTiempo());
 
-        runOnUiThread( ()-> score1.setText(""+gameState.getPuntaje1()));
-        runOnUiThread( ()-> score2.setText(""+gameState.getPuntaje2()));
-        runOnUiThread( ()-> score2.setText(""+gameState.getPuntaje2()));
-        runOnUiThread( ()-> time.setText(""+gameState.getTiempo()));
 
+        runOnUiThread(() -> score1.setText("" + gameState.getPuntaje1()));
+        runOnUiThread(() -> score2.setText("" + gameState.getPuntaje2()));
+        runOnUiThread(() -> score2.setText("" + gameState.getPuntaje2()));
+        runOnUiThread(() -> time.setText("" + gameState.getTiempo()));
 
 
     }
@@ -97,42 +97,46 @@ public class Control extends AppCompatActivity implements View.OnClickListener, 
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
 
-        switch(motionEvent.getAction()){
+        switch (motionEvent.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 buttonPressed = true;
 
                 new Thread(
 
-                        ()->{
+                        () -> {
 
-                            while (buttonPressed){
+                            while (buttonPressed) {
 
-                                switch (view.getId()){
+                                switch (view.getId()) {
 
                                     case R.id.rightButton4:
 
 
-                                        if(x <= 840) {
+                                        if (x <= 840) {
                                             x += 10;
                                             dir = false;
                                         }
 
                                         break;
                                     case R.id.leftButton3:
-                                        if(x >=0) {
+                                        if (x >= 0) {
 
                                             x -= 10;
+
+
                                             dir = true;
                                         }
                                         break;
 
                                     case R.id.jumpButton:
 
-
+                                        jump = true;
 
                                         break;
 
                                     case R.id.stealbutton:
+
+                                        steal = true;
 
                                         break;
 
@@ -140,7 +144,7 @@ public class Control extends AppCompatActivity implements View.OnClickListener, 
 
 
                                 String id = UUID.randomUUID().toString();
-                                Coordenadas coordenada = new Coordenadas(x,y,dir,id);
+                                Coordenadas coordenada = new Coordenadas(x, y, dir, steal, jump, id);
                                 Gson gson = new Gson();
                                 String json = gson.toJson(coordenada);
 
@@ -165,10 +169,7 @@ public class Control extends AppCompatActivity implements View.OnClickListener, 
             case MotionEvent.ACTION_UP:
 
                 buttonPressed = false;
-
-
-
-
+                jump = false;
 
 
                 break;

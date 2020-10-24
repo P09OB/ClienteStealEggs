@@ -9,7 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 
-public class Avatar extends AppCompatActivity implements View.OnClickListener{
+public class Avatar extends AppCompatActivity implements View.OnClickListener {
 
     private ImageView jug1;
     private ImageView jug2;
@@ -20,11 +20,11 @@ public class Avatar extends AppCompatActivity implements View.OnClickListener{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_avatar);
 
-       jug1 = findViewById(R.id.jugador1Img);
-       jug2 = findViewById(R.id.jugador2Img);
+        jug1 = findViewById(R.id.jugador1Img);
+        jug2 = findViewById(R.id.jugador2Img);
 
-       jug1.setOnClickListener(this);
-       jug2.setOnClickListener(this);
+        jug1.setOnClickListener(this);
+        jug2.setOnClickListener(this);
 
     }
 
@@ -32,13 +32,13 @@ public class Avatar extends AppCompatActivity implements View.OnClickListener{
     @Override
     public void onClick(View view) {
 
-        switch (view.getId()){
+        switch (view.getId()) {
 
             case R.id.jugador1Img:
 
-               puerto = 5000;
+                puerto = 5000;
 
-               break;
+                break;
 
             case R.id.jugador2Img:
 
@@ -47,11 +47,11 @@ public class Avatar extends AppCompatActivity implements View.OnClickListener{
                 break;
         }
 
-        Intent i = new Intent(this,Conexion.class);
+        Intent i = new Intent(this, Conexion.class);
         startActivity(i);
 
-        SharedPreferences preferences = getSharedPreferences("Cajon",MODE_PRIVATE);
-        preferences.edit().putInt("puerto",puerto).apply();
+        SharedPreferences preferences = getSharedPreferences("Cajon", MODE_PRIVATE);
+        preferences.edit().putInt("puerto", puerto).apply();
 
     }
 }

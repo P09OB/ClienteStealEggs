@@ -25,15 +25,13 @@ public class Conexion extends AppCompatActivity implements  OnMessageListener{
         setContentView(R.layout.activity_conexion);
 
         //El ip que nos envio MainActivity
-        SharedPreferences preferences= getSharedPreferences("Cajon",MODE_PRIVATE);
+        SharedPreferences preferences = getSharedPreferences("Cajon", MODE_PRIVATE);
         String codigo = preferences.getString("codigo1","NO_CODIGO");
         puerto = preferences.getInt("puerto",0);
 
         tcp = TCPSingleton.getInstance();
         tcp.setCodigo(codigo);
         tcp.setPuerto(puerto);
-        Log.e("imprimamos",""+tcp.getPuerto());
-        Log.e("imprimamos",""+tcp.getCodigo());
         tcp.setObservador(this);
 
     }
@@ -55,7 +53,6 @@ public class Conexion extends AppCompatActivity implements  OnMessageListener{
         );
 
 
-        Log.e("CLIENTE",""+mensaje);
     }
 }
 
