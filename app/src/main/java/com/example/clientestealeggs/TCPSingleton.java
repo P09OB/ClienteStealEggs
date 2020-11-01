@@ -36,7 +36,7 @@ public class TCPSingleton extends Thread {
     private int puerto;
 
 
-    //Suscripcion
+    //Suscripcionn
     public void setObservador(OnMessageListener observador){
         this.observador = observador;
     }
@@ -48,7 +48,7 @@ public class TCPSingleton extends Thread {
 
             //Conexion
             Log.e("tcp","Enviando solicitud de conexion...");
-            socket = new Socket("192.168.0."+codigo,puerto);
+            socket = new Socket("192.168.0.105",puerto);
             Log.e("tcp","Conectamos");
 
 
