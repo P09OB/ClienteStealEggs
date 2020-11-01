@@ -11,6 +11,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.clientestealeggs.model.Coordenadas;
+import com.example.clientestealeggs.model.Restart;
+import com.google.gson.Gson;
+
 import org.w3c.dom.Text;
 
 public class Ganador extends AppCompatActivity implements View.OnClickListener, OnMessageListener {
@@ -22,6 +26,7 @@ public class Ganador extends AppCompatActivity implements View.OnClickListener, 
     private TextView estadoGanador;
     private TextView puntaje1;
     private TextView puntaje2;
+    private boolean terminar = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,10 +73,22 @@ public class Ganador extends AppCompatActivity implements View.OnClickListener, 
     @Override
     public void onClick(View view) {
 
-        tcp.enviar("terminar");
+        terminar = true;
 
-        Intent i = new Intent(this, Control.class);
-        startActivity(i);
+        Restart restart = new Restart(terminar);
+        Gson gson = new Gson();
+        String json = gson.toJson(restart);
+
+        tcp.enviar(json);
+
+        if(terminar == true){
+
+            Intent i = new Intent(this, Control.class);
+            startActivity(i);
+
+
+        }
+
 
 
 
@@ -79,6 +96,8 @@ public class Ganador extends AppCompatActivity implements View.OnClickListener, 
 
     @Override
     public void recibirMensaje(String mensaje) {
+
+
 
     }
 }

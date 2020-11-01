@@ -3,6 +3,7 @@ package com.example.clientestealeggs;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
@@ -32,7 +33,8 @@ public class Control extends AppCompatActivity implements View.OnClickListener, 
     private int puerto;
     private boolean buttonPressed;
     private int x, y;
-    private boolean dir = false;
+    private boolean dirRight = false;
+    private boolean dirLeft = false;
     private boolean jump = false;
     private boolean steal = false;
 
@@ -67,7 +69,8 @@ public class Control extends AppCompatActivity implements View.OnClickListener, 
 
         } else if (puerto == 4000) {
             colorBackground.setBackgroundColor(Color.parseColor("#9DD1FF"));
-            x = 870;
+            x = 1074;
+            dirLeft = true;
         }
 
     }
@@ -90,6 +93,22 @@ public class Control extends AppCompatActivity implements View.OnClickListener, 
         runOnUiThread(() -> score2.setText("" + gameState.getPuntaje2()));
         runOnUiThread(() -> time.setText("" + gameState.getTiempo()));
 
+        boolean finish = gameState.isFinish();
+        int puntaje1 = gameState.getPuntaje1();
+        int puntaje2 = gameState.getPuntaje2();
+
+
+        Log.e("estado",""+finish);
+
+        if(finish == true){
+
+            SharedPreferences preferences = getSharedPreferences("Cajon", MODE_PRIVATE);
+            preferences.edit().putInt("puntaje1", puntaje1).apply();
+            preferences.edit().putInt("puntaje2", puntaje2).apply();
+
+           Intent i = new Intent(this, Ganador.class);
+           startActivity(i);
+        }
 
     }
 
@@ -104,33 +123,38 @@ public class Control extends AppCompatActivity implements View.OnClickListener, 
                 new Thread(
 
                         () -> {
-
+                            try {
+                                Thread.sleep(100);
                             while (buttonPressed) {
 
                                 switch (view.getId()) {
 
                                     case R.id.rightButton4:
+                                        jump = false;
+                                        dirLeft = false;
 
-
-                                        if (x <= 840) {
-                                            x += 10;
-                                            dir = false;
+                                        if (x <= 1074) {
+                                            x += 1;
+                                            dirRight = true;
                                         }
 
                                         break;
                                     case R.id.leftButton3:
+
+                                        jump = false;
+                                        dirRight = false;
                                         if (x >= 0) {
+                                            x -= 1;
+                                            dirLeft = true;
 
-                                            x -= 10;
-
-
-                                            dir = true;
                                         }
+
                                         break;
 
                                     case R.id.jumpButton:
 
                                         jump = true;
+
 
                                         break;
 
@@ -144,22 +168,17 @@ public class Control extends AppCompatActivity implements View.OnClickListener, 
 
 
                                 String id = UUID.randomUUID().toString();
-                                Coordenadas coordenada = new Coordenadas(x, y, dir, steal, jump, id);
+                                Coordenadas coordenada = new Coordenadas(x, y,dirLeft, dirRight, steal, jump, id);
                                 Gson gson = new Gson();
                                 String json = gson.toJson(coordenada);
 
                                 tcp.enviar(json);
 
-
-                                try {
-                                    Thread.sleep(100);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-
                             }
 
-
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
                         }
 
                 ).start();
@@ -169,11 +188,13 @@ public class Control extends AppCompatActivity implements View.OnClickListener, 
             case MotionEvent.ACTION_UP:
 
                 buttonPressed = false;
-                jump = false;
+
 
 
                 break;
         }
+
+
         return false;
 
 
