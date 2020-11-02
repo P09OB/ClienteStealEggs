@@ -48,7 +48,7 @@ public class TCPSingleton extends Thread {
 
             //Conexion
             Log.e("tcp","Enviando solicitud de conexion...");
-            socket = new Socket("192.168.0.105",puerto);
+            socket = new Socket("192.168.0."+codigo,puerto);
             Log.e("tcp","Conectamos");
 
 
@@ -63,7 +63,6 @@ public class TCPSingleton extends Thread {
             //Recepcion
 
             while (true){
-
                 mensaje = reader.readLine();
                 observador.recibirMensaje(mensaje);
 

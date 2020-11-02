@@ -72,7 +72,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ).start();
     }
 
+    //VERIFICA
+
     public void validar() {
+
 
         if (verificaCodigo == true) {
 

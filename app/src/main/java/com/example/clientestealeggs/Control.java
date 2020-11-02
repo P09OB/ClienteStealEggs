@@ -130,7 +130,7 @@ public class Control extends AppCompatActivity implements View.OnClickListener, 
                                 switch (view.getId()) {
 
                                     case R.id.rightButton4:
-                                        jump = false;
+
                                         dirLeft = false;
 
                                         if (x <= 1074) {
@@ -141,7 +141,6 @@ public class Control extends AppCompatActivity implements View.OnClickListener, 
                                         break;
                                     case R.id.leftButton3:
 
-                                        jump = false;
                                         dirRight = false;
                                         if (x >= 0) {
                                             x -= 1;
@@ -166,7 +165,6 @@ public class Control extends AppCompatActivity implements View.OnClickListener, 
 
                                 }
 
-
                                 String id = UUID.randomUUID().toString();
                                 Coordenadas coordenada = new Coordenadas(x, y,dirLeft, dirRight, steal, jump, id);
                                 Gson gson = new Gson();
@@ -185,14 +183,23 @@ public class Control extends AppCompatActivity implements View.OnClickListener, 
 
                 break;
 
+
             case MotionEvent.ACTION_UP:
 
                 buttonPressed = false;
-
+                jump = false;
+                steal = false;
 
 
                 break;
         }
+
+        String id = UUID.randomUUID().toString();
+        Coordenadas coordenada = new Coordenadas(x, y,dirLeft, dirRight, steal, jump, id);
+        Gson gson = new Gson();
+        String json = gson.toJson(coordenada);
+
+        tcp.enviar(json);
 
 
         return false;
